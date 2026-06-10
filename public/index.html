@@ -3,232 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Graph Hierarchy Analyzer | Bajaj SIT Challenge</title>
-  <meta name="description" content="Analyze directed graph edges, build hierarchical trees, detect cycles, and visualize structured insights.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>Graph Analyzer - Bajaj Challenge</title>
+  <meta name="description" content="Graph hierarchy analyzer for Bajaj SIT engineering challenge">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Animated background orbs -->
-  <div class="bg-effects" aria-hidden="true">
-    <div class="bg-orb bg-orb--1"></div>
-    <div class="bg-orb bg-orb--2"></div>
-    <div class="bg-orb bg-orb--3"></div>
-    <div class="bg-grid"></div>
-  </div>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="nav-logo">⬡</span>
+      Graph Analyzer
+    </div>
+    <div class="nav-links">
+      <a href="https://github.com/Raviksharma2005/Bajaj" target="_blank" class="nav-link">GitHub ↗</a>
+    </div>
+  </nav>
 
-  <div class="app">
-    <!-- ─── Header ──────────────────────────────────────────────── -->
-    <header class="header">
-      <div class="header__icon">
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-          <circle cx="12" cy="12" r="4" fill="#667eea"/>
-          <circle cx="28" cy="12" r="4" fill="#764ba2"/>
-          <circle cx="20" cy="28" r="4" fill="#f093fb"/>
-          <line x1="15" y1="13" x2="25" y2="13" stroke="#667eea" stroke-width="1.5" stroke-dasharray="2 2"/>
-          <line x1="13" y1="15" x2="18" y2="25" stroke="#764ba2" stroke-width="1.5" stroke-dasharray="2 2"/>
-          <line x1="27" y1="15" x2="22" y2="25" stroke="#f093fb" stroke-width="1.5" stroke-dasharray="2 2"/>
-        </svg>
-      </div>
-      <h1 class="header__title">Graph Hierarchy <span class="gradient-text">Analyzer</span></h1>
-      <p class="header__subtitle">Parse directed edges · Build trees · Detect cycles · Visualize insights</p>
-    </header>
+  <main class="container">
 
-    <!-- ─── Input Section ───────────────────────────────────────── -->
-    <section class="card card--input" id="inputSection">
-      <div class="card__header">
-        <h2 class="card__title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-          Enter Graph Edges
-        </h2>
-        <span class="card__badge">Input</span>
+    <div class="hero">
+      <h1>Graph Hierarchy Analyzer</h1>
+      <p>Enter directed edges to build trees, detect cycles, and analyze graph structures.</p>
+    </div>
+
+    <!-- Input -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2>📝 Input Edges</h2>
       </div>
-      <p class="card__hint">Enter edges in <code>X-&gt;Y</code> format, separated by <strong>commas</strong> or <strong>new lines</strong>. Example: <code>A-&gt;B, A-&gt;C, B-&gt;D</code></p>
-      <div class="input-area">
+      <div class="panel-body">
+        <p class="help-text">Type edges like <code>A-&gt;B</code> separated by commas or new lines.</p>
         <textarea
           id="edgeInput"
-          class="input-textarea"
-          placeholder="A->B, A->C, B->D, C->E, E->F&#10;X->Y, Y->Z, Z->X&#10;P->Q, Q->R&#10;G->H, G->H, G->I&#10;hello, 1->2, A->"
-          rows="8"
+          class="text-input"
+          placeholder="e.g. A->B, A->C, B->D, X->Y, Y->Z"
+          rows="6"
           spellcheck="false"
         ></textarea>
-        <div class="input-textarea__count">
-          <span id="edgeCount">0</span> edges detected
+        <div class="input-footer">
+          <span class="edge-counter" id="edgeCount">0 edges</span>
+          <div class="btn-group">
+            <button id="exampleBtn" class="btn btn-outline" type="button">Load Example</button>
+            <button id="clearBtn" class="btn btn-outline" type="button">Clear</button>
+            <button id="submitBtn" class="btn btn-blue" type="button">
+              <span class="btn-label">Analyze →</span>
+              <span class="btn-loading" hidden>Analyzing...</span>
+            </button>
+          </div>
         </div>
       </div>
-      <div class="input-actions">
-        <button id="exampleBtn" class="btn btn--ghost" type="button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-            <polyline points="10 9 9 9 8 9"></polyline>
-          </svg>
-          Load Example
-        </button>
-        <button id="clearBtn" class="btn btn--ghost" type="button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          Clear
-        </button>
-        <button id="submitBtn" class="btn btn--primary" type="button">
-          <span class="btn__text">Analyze Graph</span>
-          <span class="btn__loader" hidden>
-            <span class="spinner"></span>
-            Processing…
-          </span>
-          <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </button>
-      </div>
-    </section>
+    </div>
 
-    <!-- ─── Error Section ───────────────────────────────────────── -->
-    <section class="card card--error" id="errorSection" hidden>
-      <div class="error-content">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="15" y1="9" x2="9" y2="15"></line>
-          <line x1="9" y1="9" x2="15" y2="15"></line>
-        </svg>
-        <div>
-          <h3>Request Failed</h3>
-          <p id="errorMessage">Something went wrong.</p>
-        </div>
-      </div>
-    </section>
+    <!-- Error -->
+    <div class="alert alert-red" id="errorSection" hidden>
+      <strong>Error:</strong> <span id="errorMessage"></span>
+    </div>
 
-    <!-- ─── Results Section ─────────────────────────────────────── -->
-    <section class="results" id="resultsSection" hidden>
+    <!-- Results -->
+    <div id="resultsSection" hidden>
 
-      <!-- User Info Bar -->
-      <div class="user-bar card" id="userBar">
-        <div class="user-bar__item">
-          <span class="user-bar__label">User ID</span>
-          <span class="user-bar__value" id="userId"></span>
-        </div>
-        <div class="user-bar__divider"></div>
-        <div class="user-bar__item">
-          <span class="user-bar__label">Email</span>
-          <span class="user-bar__value" id="userEmail"></span>
-        </div>
-        <div class="user-bar__divider"></div>
-        <div class="user-bar__item">
-          <span class="user-bar__label">Enrollment</span>
-          <span class="user-bar__value" id="userEnrollment"></span>
-        </div>
+      <!-- Info bar -->
+      <div class="info-bar" id="userBar">
+        <div class="info-item"><span>User:</span> <strong id="userId"></strong></div>
+        <div class="info-item"><span>Email:</span> <strong id="userEmail"></strong></div>
+        <div class="info-item"><span>Enrollment:</span> <strong id="userEnrollment"></strong></div>
       </div>
 
-      <!-- Summary Dashboard -->
-      <div class="summary-grid">
-        <div class="summary-card summary-card--trees">
-          <div class="summary-card__icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"></path>
-              <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-              <circle cx="12" cy="10" r="2"></circle>
-              <line x1="8" y1="2" x2="8" y2="4"></line>
-              <line x1="16" y1="2" x2="16" y2="4"></line>
-            </svg>
-          </div>
-          <div class="summary-card__content">
-            <span class="summary-card__number" id="totalTrees">0</span>
-            <span class="summary-card__label">Valid Trees</span>
-          </div>
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-box stat-green">
+          <div class="stat-num" id="totalTrees">0</div>
+          <div class="stat-label">Trees</div>
         </div>
-        <div class="summary-card summary-card--cycles">
-          <div class="summary-card__icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="23 4 23 10 17 10"></polyline>
-              <polyline points="1 20 1 14 7 14"></polyline>
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-            </svg>
-          </div>
-          <div class="summary-card__content">
-            <span class="summary-card__number" id="totalCycles">0</span>
-            <span class="summary-card__label">Cycles Detected</span>
-          </div>
+        <div class="stat-box stat-red">
+          <div class="stat-num" id="totalCycles">0</div>
+          <div class="stat-label">Cycles</div>
         </div>
-        <div class="summary-card summary-card--root">
-          <div class="summary-card__icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-            </svg>
-          </div>
-          <div class="summary-card__content">
-            <span class="summary-card__number" id="largestRoot">—</span>
-            <span class="summary-card__label">Largest Tree Root</span>
-          </div>
+        <div class="stat-box stat-blue">
+          <div class="stat-num" id="largestRoot">—</div>
+          <div class="stat-label">Largest Root</div>
         </div>
       </div>
 
       <!-- Hierarchies -->
       <div id="hierarchiesContainer"></div>
 
-      <!-- Details Grid: Invalid + Duplicates -->
-      <div class="details-grid">
-        <div class="card card--detail" id="invalidSection" hidden>
-          <div class="card__header">
-            <h3 class="card__title card__title--warning">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                <line x1="12" y1="9" x2="12" y2="13"></line>
-                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-              </svg>
-              Invalid Entries
-            </h3>
-            <span class="card__count" id="invalidCount">0</span>
+      <!-- Invalid & Duplicates -->
+      <div class="two-col">
+        <div class="panel panel-small" id="invalidSection" hidden>
+          <div class="panel-head">
+            <h3>⚠️ Invalid Entries <span class="badge badge-yellow" id="invalidCount">0</span></h3>
           </div>
-          <div class="tag-list" id="invalidList"></div>
+          <div class="panel-body">
+            <div class="chip-list" id="invalidList"></div>
+          </div>
         </div>
-        <div class="card card--detail" id="duplicateSection" hidden>
-          <div class="card__header">
-            <h3 class="card__title card__title--info">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-              </svg>
-              Duplicate Edges
-            </h3>
-            <span class="card__count" id="duplicateCount">0</span>
+        <div class="panel panel-small" id="duplicateSection" hidden>
+          <div class="panel-head">
+            <h3>📋 Duplicate Edges <span class="badge badge-gray" id="duplicateCount">0</span></h3>
           </div>
-          <div class="tag-list" id="duplicateList"></div>
+          <div class="panel-body">
+            <div class="chip-list" id="duplicateList"></div>
+          </div>
         </div>
       </div>
 
-      <!-- Raw JSON Toggle -->
-      <div class="card card--json">
-        <button class="json-toggle" id="jsonToggle" type="button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-          <span>Show Raw JSON Response</span>
-          <svg class="json-toggle__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
+      <!-- JSON -->
+      <div class="panel">
+        <button class="json-btn" id="jsonToggle" type="button">
+          { } Show JSON Response ▾
         </button>
-        <pre class="json-output" id="jsonOutput" hidden></pre>
+        <pre class="json-pre" id="jsonOutput" hidden></pre>
       </div>
-    </section>
+    </div>
 
-    <!-- ─── Footer ──────────────────────────────────────────────── -->
-    <footer class="footer">
-      <p>Built for <strong>Bajaj Finserv Health — SIT Full Stack Challenge</strong></p>
-      <p class="footer__sub">Ravi Sharma · 2025</p>
-    </footer>
-  </div>
+  </main>
+
+  <footer class="footer">
+    <p>Made by Ravi Sharma — Bajaj Finserv SIT Challenge 2025</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
