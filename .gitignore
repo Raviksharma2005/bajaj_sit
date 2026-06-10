@@ -4,3 +4,5 @@ node_modules/
 extracted_text.txt
 SIT_Round1_Assesment.pdf
 *.log
+
+.vercel

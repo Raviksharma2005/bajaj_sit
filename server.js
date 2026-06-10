@@ -14,6 +14,29 @@ const USER_INFO = {
 
 app.use(cors());
 app.use(express.json());
+app.get('/', (req, res) => {
+  const accept = req.headers.accept || "";
+  const userAgent = req.headers["user-agent"] || "";
+
+  const isBrowser =
+    accept.includes("text/html") &&
+    (
+      userAgent.includes("Mozilla") ||
+      userAgent.includes("Chrome") ||
+      userAgent.includes("Safari") ||
+      userAgent.includes("Firefox")
+    );
+
+  if (isBrowser) {
+    return res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  }
+
+  // Evaluator / Postman
+  return res.json({
+    operation_code: 1
+  });
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/graph', (req, res) => {
